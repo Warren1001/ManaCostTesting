@@ -1,0 +1,33 @@
+
+:root {
+  color-scheme: dark light;
+}
+
+td, th {
+  text-align: center;
+  border: 1px solid;
+  border-color: rgb(55, 55, 55);
+  padding: 0px;
+  margin: 0px;
+}
+
+th {
+  padding: 2px;
+}
+
+table {
+  margin-left: 0px;
+  padding: 0px;
+}
+
+input[type='number'] {
+    width: 40px;
+}
+
+#tableContainer {
+  float: left;
+}
+
+#inputContainer {
+  float: left;
+}
