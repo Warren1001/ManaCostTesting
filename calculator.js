@@ -18,12 +18,14 @@ function load() {
 		let frame = 50
 		let lastRegenSec = 0
 
+		let headers = ["Frame Length", "Mana Needed", "Diff from Previous"];
+
 		for (let mana = 2; mana <= manaCost * 1500; mana += 2) {
 			let manaCostSec = 25 / frame * manaCost
 			let regenSec = Math.floor(256 * mana / 3000) / 256 * 25
 			if (regenSec >= manaCostSec) {
 				if (regenSec != lastRegenSec) {
-					breakpoints.push([frame, mana])
+					breakpoints.push([frame, mana, breakpoints.length == 0 ? 0 : mana - breakpoints[breakpoints.length - 1][1]])
 					lastRegenSec = regenSec
 				}
 				frame--
@@ -38,8 +40,10 @@ function load() {
 			} else i++
 		}
 
+		breakpoints[0][2] = "-";
+
 		breakpoints.reverse()
-		displayTable(breakpoints)
+		displayTable(headers, breakpoints)
 
 	}
 
@@ -58,13 +62,13 @@ function removeAllChildNodes(parent) {
 	}
 }
 
-function displayTable(breakpoints) {
+function displayTable(headers, breakpoints) {
 
 	removeAllChildNodes(CONTAINER_TABLE)
 
 	let table = document.createElement("table")
 
-	addTableHeader(table, ["Frame Length", "Mana Needed"])
+	addTableHeader(table, headers)
 
 	for (const breakpoint of breakpoints) {
 		addTableRow(table, breakpoint)
