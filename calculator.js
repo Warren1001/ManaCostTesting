@@ -15,17 +15,21 @@ function load() {
 		manaCost = getManaCostFromInput()
 
 		let breakpoints = new Array()
-		let frame = 50
+		let frame = 100
 		let lastRegenSec = 0
 
-		let headers = ["Frame Length", "Mana Needed", "Diff from Previous"];
+		let headers = ["Frame Length", "Mana Needed", "Needed for Next"];
 
 		for (let mana = 2; mana <= manaCost * 1500; mana += 2) {
 			let manaCostSec = 25 / frame * manaCost
 			let regenSec = Math.floor(256 * mana / 3000) / 256 * 25
 			if (regenSec >= manaCostSec) {
 				if (regenSec != lastRegenSec) {
-					breakpoints.push([frame, mana, breakpoints.length == 0 ? 0 : mana - breakpoints[breakpoints.length - 1][1]])
+					if (breakpoints.length > 0) {
+						let lastBp = breakpoints[breakpoints.length - 1]
+						lastBp[2] = mana - lastBp[1]
+					}
+					breakpoints.push([frame, mana, 0])
 					lastRegenSec = regenSec
 				}
 				frame--
@@ -40,7 +44,7 @@ function load() {
 			} else i++
 		}
 
-		breakpoints[0][2] = "-";
+		breakpoints[breakpoints.length - 1][2] = "-"
 
 		breakpoints.reverse()
 		displayTable(headers, breakpoints)
